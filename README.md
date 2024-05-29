@@ -1,6 +1,6 @@
 # Linux
 
-## Cài đặt Ubuntu serve
+## Cài đặt Ubuntu server
 
 Note: Trong VMware có cài đặt mạng:
 
@@ -14,11 +14,15 @@ Note: Trong VMware có cài đặt mạng:
 
 Nên set địa chỉ Ip tĩnh cho server
 
-> sudo -i
+```
+  sudo -i
+```
 
 Lệnh sudo dùng cho user root, có quyền truy cập tối cáo nhất trong hệ thống
 
-> nano /etc/netplan/00-installer-config.yaml
+```
+nano /etc/netplan/00-installer-config.yaml
+```
 
 Ta thấy được thông tin network: tên card mạng, dhcp, version
 
@@ -39,11 +43,15 @@ Note: Nếu sử dụng NAT thì phải địa chỉ IP là có cùng subnetmask
 
 Sử dụng cấu hình network mới
 
-> netplan apply
+```
+netplan apply
+```
 
 Kiểm tra kết nối
 
-> ip a
+```
+ip a
+```
 
 Note: chú ý phần tên card mạng mình sử dụng có đúng địa chỉ nãy mình set chưa
 
@@ -51,17 +59,23 @@ Tắt máy. Tạo ra một phiên bản backup snapshot dùng để sử dụng 
 
 Kết nối ssh bằng terminal window 
 
-> ssh ainz@192.168.14.10
+```
+ssh ainz@192.168.14.10
+```
 
 ## Các câu lệnh Linux thông dụng
 
 1. Cho biết biết vị trí hiện tại
 
-> pwd
+```
+pwd
+```
 
 2. Cho biết phiên user hiện tại
 
-> whoami
+```
+whoami
+```
 
 3. Hệ thống file trong linux
 
