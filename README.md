@@ -458,3 +458,19 @@ chmod 750
 ```
 
 Thay đổi quyền người sở hữu full quyền, nhóm sở hữu rx, other không có quyền nào
+
+## Tư duy triển khai mọi dự án
+
+Để triển khai bất kì thì có công cụ tương ứng với backend, frontend. Phải có phiên bản tương ứng lớn hơn hoặc bằng.
+
+File trong dự án, có 3 loại file chính: file chức năng, file cấu hình, file khác (readme, etc).
+
+Bước triển khai: có hai bước triển khai: Build, Run
+
+Làm sao build ?
+
+Run thế nào
+
+Notes:
+
+Mỗi dự án có thư mục riêng, user riêng cho mỗi dự án.
