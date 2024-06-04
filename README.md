@@ -318,3 +318,65 @@ Shortcuts:
 3. copy nhấn `yy`
 4. paste nhấn `p`
 5. Lưu nhấn `:x`
+
+## Quyền truy cập
+
+Hãy tưởng tượng trong ngôi nhà có các chủ sở hữu, nhóm sở hữu, nhóm khác. Tình huống đặt ra nếu cấp quyền sai thì ngôi nhà bị kiểm soát hoàn toàn bởi một người nào đó không mong muốn.
+
+Cách tạo user trong hệ thống. Notes: cần quyền user root
+
+```bash
+useradd hhman1
+adduser hhman2
+Adding user `hhman2' ...
+Adding new group `hhman2' (1002) ...
+Adding new user `hhman2' (1002) with group `hhman2' ...
+Creating home directory `/home/hhman2' ...
+Copying files from `/etc/skel' ...
+```
+
+Thấy sự khác biệt giữa 2 câu lệnh useradd và adduser. useradd chỉ tạo ra user mà không đòi hỏi thêm các phần như adduser
+
+Để chuyển qua user khác dùng
+
+```bash
+su hhman1
+su hhman2
+```
+
+sự khác biệt rõ hơn khi ta thực hiện 2 lệnh trên. KHi thực hiện bằng lệnh adduser ta đã có một user riêng và có thể đăng nhập vào bằng user này.
+
+Xem thông tin của user trong `/etc/passwd`.
+
+Xóa một user
+
+```bash
+deluser hhman1
+```
+
+Tạo một group
+
+```bash
+groupadd devops1
+```
+
+Xóa một group
+
+```bash
+delgroup devops1
+```
+
+Thêm một user vào group
+
+```bash
+usermod -aG devops2 hhman2
+```
+
+Notes:
+
+* -a: append thêm vào
+* -G: liệt kê ds của hhan2. Nếu không sử dụng -G thì hệ thống thêm hhman2 vào devops2 nhưng sẽ xóa tất cả group có hhman2 trước đó
+
+Khi tạo một user mới sẽ tạo ra một group tương ứng của user đó và thêm user vào group đó.
+
+Phân quyền
