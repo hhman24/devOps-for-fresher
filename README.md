@@ -379,4 +379,82 @@ Notes:
 
 Khi tạo một user mới sẽ tạo ra một group tương ứng của user đó và thêm user vào group đó.
 
-Phân quyền
+Xem group của một user
+
+```bash
+groups manhnv2
+```
+
+Phân quyền có hai loại.
+
+* Quyền sở hữu
+
+Tạo thư mục datas
+
+```bash
+mkdir datas
+touch datas/data1.txt
+ls -l datas/
+ls -l
+```
+
+```bash
+total 0
+-rw-rw-r-- 1 root root 0 Jun  4 15:04 data1.txt
+total 4
+drwxrwxr-x 2 root root 4096 Jun  4 15:04 datas
+```
+
+Sau khi tạo thành công, xem file vừa tạo. Ở đây, biết được thông tin file `data1.txt` thuộc sở hữu của user root (bên trái) và nhóm root (bên phải).
+
+Câu hỏi đặt ra làm sao thay đổi, quyền người sở hữu:nhóm sở hữu.
+
+```bash
+chown root:devops2 datas/
+```
+
+Nhưng ta lại muốn thay đổi quyền sở hữu từ cấp cha
+
+```bash
+chown -R root:devops2 datas/
+```
+
+* Quyền truy cập
+
+Quyền truy cấp trên Linux: rwx (read, write, execute)
+
+```bash
+total 8
+drwxr-xr-x 2 root devops2 4096 Jun  4 15:16 datas
+drwx------ 3 root root    4096 May 28 15:18 snap
+
+total 0
+-rw-r--r-- 1 root devops2 0 Jun  4 15:16 data1.txt
+```
+
+Kí tự đầu tiên:
+
+* thư mục: d
+* file: -
+
+3 kí tự tiếp rwx đại diện người sở hữu có quyền truy cập. 3 kí tự tiếp là quyền của nhóm sở hữu. 3 kí tự tiếp theo cho các bên khác.
+
+```bash
+chmod u=rwx,g=rx,o=- datas/
+
+total 8
+drwxr-x--- 2 root devops2 4096 Jun  4 15:16 datas
+drwx------ 3 root root    4096 May 28 15:18 snap
+```
+
+Thay đổi quyền truy cập lần lượt của user(u) group(u) other(o)
+
+Notes: Trong linux, để tác động tới một file thư mục phải có ít nhất quyền thực thi.
+
+Có cách khác để phân quyền. r=4,w=2,x=1 ==> 4+2+1=7
+
+```bash
+chmod 750
+```
+
+Thay đổi quyền người sở hữu full quyền, nhóm sở hữu rx, other không có quyền nào
