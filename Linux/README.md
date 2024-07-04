@@ -515,17 +515,112 @@ mkdir /projects
 mv todolist /projects/
 
 ls -l /projects/
+
+total 4
+drwxr-xr-x 5 root root 4096 Jan  7 21:53 todolist
 ```
 
 Tiếp theo ta cần một user riêng -> tất nhiên ta cần thay đổi quyền của folder `todolist` cho user mới tạo
 
-Ta cần thay đổi quyền thực thi của `todolist` là user(7) và group(5) cuối cùng là người dùng khác là 0 (bởi vì người dùng trong dự án khác không thể tác động bên dự án này)
+```bash
+adduser todolist
 
-Chúng cần biết trong dự án build như thế nào ?
+Adding user `todolist' ...
+Adding new group `todolist' (1002) ...
+Adding new user `todolist' (1001) with group `todolist' ...
+Creating home directory `/home/todolist' ...
+Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for todolist
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n] y
+```
 
-File cấu hình dự án
+```bash
+chown -R todolist:todolist /projects/todolist/
 
-Có 3 cách triển khia một dự án frontend
+total 4
+drwxr-xr-x 5 todolist todolist 4096 Jan  7 21:53 todolist
+```
+
+Ta cần thay đổi quyền thực thi của `todolist` là user(7) và group(5) cuối cùng là người dùng khác là 0 (bởi vì người dùng trong dự án khác không thể tác động bên dự án này).
+
+```bash
+chmod -R 750 /projects/todolist
+
+ls -l /projects/todolist
+
+total 4
+drwxr-x--- 5 todolist todolist 4096 Jan  7 21:53 todolist
+```
+
+Chúng cần biết trong dự án build như thế nào ? (prequire - [Nodejs](https://nodejs.org/en/download/package-manager), [Vuejs](https://vuejs.org/guide/quick-start))
+
+File cấu hình dự án, cần chú một số file cho dự án frontend: package.json, *.config.js. Cài đặt các dependencies, tiếm hành build dự án.
+
+Có 3 cách triển khai một dự án frontend thông dụng
+
+* Dùng một web server
+
+Dùng `Ngnix` webserver để chạy -> tiến hành cài đặt bằng root
+
+Ngnix mở ở port 80. Dùng `netstat` để tiến hành kiểm tra
+
+Note: Nếu địa chỉ Ip là `0.0.0.0` có nghĩa là mở everywhere
+
+Cần có một file cấu hình Ngnix trong `/etc/nginx`, mặc định nằm trong sites-available/default
+
+Tạo một file config trong `conf.d/todolist.conf`
+
+```conf
+server {
+  listen 8080;
+  root /projects/todolist/dist/;
+  index index.html;
+  try_files $uri $uri/ /index.html;
+}
+```
+
+Sau khi cấu hình xong dùng câu lệnh `nginx -t` để kiểm tra lỗi và `systemctl restart nginx` để chạy lại
+
+Cần chỉnh lại quyền truy cập cho user ngnix (`/etc/nginx/nginx.conf`) -> tối thiểu để cho dự án cần cho user ngnix nằm trong nhóm todolist
+
+```bash
+usermod -aG todolist www-data
+systemctl restart nginx
+```
+
+Chạy lại nginx mà không cần restart bằng `nginx -s reload`
+
+* Chạy dưới dạng một service
+
+Chạy dự án vision của react. Các bước đầu giống như ở trên
+
+Tạo một file service trong `/lib/systemd/system/vision.service`
+
+```service
+[Service]
+Type=simple
+User=vision
+Restart=on-failure
+WorkingDirectory=/projects/vision/
+ExecStart= npm run start -- --port=3000
+```
+
+```bash
+systemctl daemon-reload
+systemctl start vision
+systemctl status vision
+```
+
+* ...
 
 #### Triển khai Todolist
 
