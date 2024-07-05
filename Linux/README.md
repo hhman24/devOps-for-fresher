@@ -622,6 +622,122 @@ systemctl status vision
 
 * ...
 
-#### Triển khai Todolist
-
 ### Backend
+
+Copy file `shoeshop-ecommerce.zip` sang server và giải nén.
+
+Các bước còn lại làm tương tự như trên phần frontend.
+
+#### Build Java Project With Maven
+
+* Cài đặt Java 17
+
+  ```bash
+  sudo apt install openjdk-17-jdk 
+  ```
+
+* Cài đặt Maven
+
+  ```bash
+  sudo apt install maven
+  ```
+
+* Cài đặt mariadb-server, config database [here](https://www.baeldung.com/spring-boot-configure-data-source-programmatic)
+
+  ```bash
+  apt install mariadb-server
+  ```
+
+* Kiểm tra cổng kết nối tới server bằng `netstat -tlpun`. Lúc này databse đang kết nối local nên chúng ta cần config lại để cho các server khác có thể truy cập tới. Trước khi config cần `systemctl stop mariadb`. File cần config thường nằm ở thư mục `/etc/`
+
+  ```bash
+  ls /etc/mysql/mariadb.conf.d/
+
+  50-client.cnf  50-mysql-clients.cnf  50-mysqld_safe.cnf  50-server.cnf
+  ```
+  
+  Mở file 50-server.cnf để chỉnh config. Notes: nên cài đặt databse ở một server riêng. Tiến hành thay đổi địa chỉ tại `bind-address` thành `0.0.0.0` every where. Khởi động lại mariadb
+
+  ```md
+  systemctl restart mariadb
+  ```
+
+* Chạy script tạo database
+
+  ```bash
+  mysql -u root
+  ```
+
+  Xem các database hiện tại đang có
+
+  ```bash
+  show databases;
+  ```
+
+  Tạo database shoeshop
+
+  ```bash
+  create database shoeshop;
+  ```
+
+  Tạo user cho phạm vi `%` có thể truy cập tới các server
+
+  ```bash
+  create user 'shoeshop'@'%' identified by 'shoeshop';
+  ```
+
+  Gán quyền cho user đủ quyền tác động lên database
+
+  ```bash
+  grant all privileges on shoeshop.* to 'shoeshop'@'%';
+  ```
+
+  Lưu lại những quyền mà đã gán cho user
+
+  ```bash
+  flush privileges;
+  ```
+
+  Đăng nhập lại database bằng user mới được tạo
+
+  ```bash
+  mysql -h 192.168.14.110 -p 3306 -u shoeshop -p
+  
+  shoeshop
+  ```
+
+  Cần import file sql của src vào database
+
+  ```bash
+  use shoeshop;
+
+  show tables;
+  ```
+
+  ```bash
+  source /projects/shoeshop/shoe_shopdb.sql 
+  ```
+
+* Config databasesource `src/main/resources/application.properties` thành địa chỉ của máy server `spring.datasource.url=jdbc:mysql://192.168.14.110:3306/shoeshop, spring.datasource.username=shoeshop, spring.datasource.password=shoeshop`
+* Build dự án `mvn install -DskipTests=true`
+* Chạy dự án `java -jar target/shoe-ShoppingCart-0.0.1-SNAPSHOT.jar`
+* Câu lệnh để chạy ngầm với lưu log ở bên ngoài
+  
+  ```bash
+  nohup java -jar target/shoe-ShoppingCart-0.0.1-SNAPSHOT.jar 2>&1 &
+
+  [1] 23321
+  # Nó đang chạy dưới một ppid trên và lưu ra một file nohup.out
+  ```
+
+  Output của câu lệnh trước là input của câu lệnh sau. grep có nghĩa là tìm kiếm
+
+  ```bash
+  ps -ef| grep shoe
+  ```
+
+  Kill process id, -9 buộc dừng
+
+  ```bash
+  kill -9
+  ```
