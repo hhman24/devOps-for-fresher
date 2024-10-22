@@ -40,10 +40,48 @@ Chạy cài đặt cấu hình
 gitlab-ctl reconfigure
 ```
 
-Cần thêm hosts ở trên window để có thể truy cập được `c:\Windows\System32\Drivers\etc\hosts`
+Cần thêm hosts ở trên window để có thể truy cập được `C:\Windows\System32\drivers\etc`
 
 usernam mặc định là root, passwd `cat /etc/gitlab/initial_root_password`
 
 Notes: cần disable tạo mới user, disable auto to DevOps, thay đổi mk cho user root
 
-## Launch Git workflow
+## Các câu lệnh Git cơ bản
+
+Trong dự án có thể có nhiều project(service backend - micro service, service frontend) --> Mỗi dự án nên tiến hành tạo ` 1 group để chứa các service dự án đó.
+
+Tạo một folder `/data`
+
+```bash
+mkdir /data
+```
+
+Tiến hành config để xác định ai upcode lên github
+
+```bash
+git config --global user.name "Hoang Huu Minh An"
+git config --global user.email "hhman240602@tech.com"
+```
+
+create new repository. And copy all shoeshop source from `/home/ainz` to `/data/shoeshop`
+
+```bash
+cp -rf shoeshop/* /data/shoeshop/
+```
+
+```bash
+git clone http://gitlab.hhman.tech/shoeshop/shoeshop.git
+cd shoeshop
+git switch -c main
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin main
+```
+
+Nên commit tường minh và rõ ràng `git commit convention`.
+
+## Triển khai Git workflow
+
+Cách dùng git để triển khai.
+![gitFlow](./assets/workflow.png)
