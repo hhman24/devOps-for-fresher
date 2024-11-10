@@ -26,7 +26,7 @@ Muốn truy cập gitlab bằng một cái domain ? Sử dụng phương pháp a
 vim /etc/hosts
 ```
 
-Thêm `192.168.14.100 gitlab.hhman.tech`
+Thêm `192.168.14.100 gitlab.hhman.tech` `192.168.14.100 git.hhman.tech`
 
 Cần chỉnh thay đổi url của gitlab, external_url '<http://gitlab.hhman.tech>'
 

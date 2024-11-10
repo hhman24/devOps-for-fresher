@@ -611,7 +611,7 @@ Type=simple
 User=vision
 Restart=on-failure
 WorkingDirectory=/projects/vision/
-ExecStart= npm run start -- --port=3000
+ExecStart=npm run start -- --port=3000
 ```
 
 ```bash
@@ -701,7 +701,7 @@ Các bước còn lại làm tương tự như trên phần frontend.
   Đăng nhập lại database bằng user mới được tạo
 
   ```bash
-  mysql -h 192.168.14.110 -p 3306 -u shoeshop -p
+  mysql -h 192.168.14.110 -P 3306 -u shoeshop -p
   
   shoeshop
   ```
