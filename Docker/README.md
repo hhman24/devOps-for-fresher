@@ -323,3 +323,68 @@ Run this compose
 ```bash
 docker compose up -d
 ```
+
+## Docker container là gì ?
+
+Khi triển khai bằng server ubuntun lúc trk. Chúng ta phải cài đặt nhìu công cụ ví dụ như: maven, nodejs, java, ... Các dự án version các công cụ khác nhau.
+
+--> Cái và quản lý nhiều thời gian để quản lý
+
+![alt text](./assets/image.png)
+
+? Lý do tại sao:
+
+Có thể chạy dự án trên các nên tàng khác nhau: Dùng docker đóng góp đưa lên registry. Không phụ thuộc vào nền tàng, tạo ra một môi trường độc lập.
+
+Docker Architecture
+
+![alt text](./assets/image-1.png)
+
+## Cách sử dụng docker
+
+Tạo một folder chứa các tool
+
+```bash
+mkdir /tools
+cd /tools
+mkdir docker
+cd docker
+vim install-docker.sh
+```
+
+Để file này chạy được cần cấp quyền thực thi cho nó
+
+```bash
+chmod +x install-docker.sh
+```
+
+Chạy file để cái đặt
+
+```bash
+bash install-docker.sh
+```
+
+## Tư duy docker file
+
+--> Viết cấu hình đưa source code vào container, xây dựng cấu hình sẵn.
+
+FROM + docker image: base image
+
+WORKDIR: chỉ định thư mục làm việc
+
+COPY ..: chấm đầu tiên vị trí hiện tại của dockerfil, chấm thứ hai là workdir
+
+RUN: chạy command
+
+ENV: khai báo các env
+
+<!-- EXPOSE: Định nghĩa ứng dụng trong cowntainer chạy ở port nào -->
+
+CMD: Xác định lệnh và giá trị mặc định
+
+ENTRYPOINT: Giữ nguyện một lệnh cố định, cho phép
+
+1. Chạy ứng dụng bằng user khác
+2. Chọn base image phù hợp.
+3. Công cụ quét docker image.
+4. Multiple stage.
